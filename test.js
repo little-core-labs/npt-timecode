@@ -83,14 +83,13 @@ test('Time', (t) => {
     const time = Time.from({
       hours: 3,
       minutes: 30,
-      seconds: 45.32
+      seconds: 45.3
     })
 
     t.ok(3 === time.hours)
     t.ok(30 === time.minutes)
     t.ok(45 === time.seconds)
-    console.log(time.computed);
-    t.ok(320 === time.milliseconds)
+    t.ok(300 === time.milliseconds)
   }
 
   {
@@ -181,15 +180,37 @@ test('Time', (t) => {
   }
 
   {
-    const time = Time.from('05:5.5')
+    const time = Time.from('05:5.55')
     t.ok(time.computed)
     t.ok(Number(time) === time.value)
-    t.ok(305.5 === time.value)
+    t.ok(305.55 === time.value)
     t.ok(0 === time.hours)
     t.ok(5 === time.minutes)
     t.ok(5 === time.seconds)
-    t.ok(500 === time.milliseconds)
-    t.ok(500 === time.ms)
+    t.ok(550 === time.milliseconds)
+    t.ok(550 === time.ms)
+  }
+
+  {
+    const time = Time.from('01:1.5')
+    t.ok(time.computed)
+    t.ok(Number(time) === time.value)
+    t.ok(60 + 1 + 0.5 === time.value)
+  }
+
+  {
+    const time = Time.from('2.345')
+    t.ok(time.computed)
+    t.ok(Number(time) === time.value)
+    t.ok(2.345 === time.value)
+  }
+
+  {
+    const time = Time.from('fofdd')
+    t.ok(false === time.isValid)
+
+    time.set(Infinity)
+    t.ok(false === time.isValid)
   }
 
   t.end()

@@ -1,5 +1,4 @@
 const { inspect } = require('util')
-const npt = require('normalplaytime')
 
 // istanbul ignore next
 const { isFinite = global.isFinite } = Number
@@ -52,7 +51,7 @@ class Time {
       if ('now' === arg) {
         return new this(NOW)
       } else {
-        const parsed = npt.parse(arg)
+        const parsed = parse(arg)
         if (parsed) {
           return new this(parsed/1000)
         }
@@ -99,7 +98,7 @@ class Time {
    * @type {Boolean}
    */
   get isValid() {
-    return false === Number.isNaN(this.value)
+    return false === Number.isNaN(this.value) && isFinite(+this.value)
   }
 
   /**
@@ -190,7 +189,7 @@ class Time {
   }
 
   /**
-   * Computed total number of milliseconds this `Time` instance represents.
+   * Computed number of milliseconds this `Time` instance represents.
    * @accessor
    * @type {Number}
    */
@@ -275,6 +274,17 @@ class Time {
   }
 
   /**
+   * Converts this `Time` instance into a plain JSON object.
+   * @private
+   * @return {Object}
+   */
+  /* istanbul ignore next */
+  toJSON() {
+    const { hours, minutes, seconds, milliseconds } = this
+    return { hours, minutes, seconds, milliseconds }
+  }
+
+  /**
    * Implements `util.inspect.custom` symbol for pretty output.
    * @private
    * @return {String}
@@ -337,6 +347,33 @@ class Range {
   }
 
   /**
+   * Set the start and stop time values for this range.
+   * @param {Number|String|Object|Time} start
+   * @param {?(Number|String|Object|Time)} stop
+   */
+  set(start, stop) {
+    this.start.set(start)
+
+    if (stop) {
+      this.stop.set(stop)
+
+      if (this.stop < this.start) {
+        this.stop.set(Number.NaN)
+      }
+    } else if (null === stop) {
+      this.stop.reset()
+    }
+  }
+
+  /**
+   * Resets the start and stop `Time` instance.
+   */
+  reset() {
+    this.start.reset()
+    this.stop.reset()
+  }
+
+  /**
    * Converts this `Range` instance to an optionally formatted string.
    * @param {?String} format
    * @return {String}
@@ -357,28 +394,14 @@ class Range {
   }
 
   /**
-   * Set the start and stop time values for this range.
-   * @param {Number|String|Object|Time} start
-   * @param {Number|String|Object|Time} stop
+   * Converts this `Range` instance into a plain JSON object.
+   * @private
+   * @return {Object}
    */
-  set(start, stop) {
-    this.start.set(start)
-
-    if (stop) {
-      this.stop.set(stop)
-
-      if (this.stop < this.start) {
-        this.stop.set(Number.NaN)
-      }
-    }
-  }
-
-  /**
-   * Resets the start and stop `Time` instance.
-   */
-  reset() {
-    this.start.reset()
-    this.stop.reset()
+  /* istanbul ignore next */
+  toJSON() {
+    const { start, stop } = this
+    return { start, stop }
   }
 
   /**
@@ -479,6 +502,49 @@ function getComputedSeconds(opts) {
     total += (ms || 0) / 1000
   }
   return total
+}
+
+function parse(string) {
+  string = string.trim()
+
+  const parsed = { hours: 0, minutes: 0, seconds: 0, ms: 0 }
+  let match = null
+
+  // [<hours>:[<minutes:[<seconds>[.<milliseconds>]]]]
+  match = string.match(/^(\d+)?:?(\d\d?)?:?(\d\d?)?\.?(\d+)?$/)
+
+  if (!match) {
+    return null
+  }
+
+  let [ _, h, m, s, ms ] = match
+
+  if (ms && +!isFinite(ms)) {
+   if (2 == ms.length) {
+     parsed.ms = 10 * parseInt(ms)
+   } else if (1 === ms.length) {
+     parsed.ms = 100 * parseInt(ms)
+   } else {
+     parsed.ms = parseInt(ms.slice(0, 3))
+   }
+  }
+
+  if (!s && !m && h) {
+    parsed.seconds = parseInt(h)
+  } else if (!s && m) {
+    parsed.seconds = parseInt(m)
+    parsed.minutes = parseInt(h) || 0
+  } else if (s) {
+    parsed.seconds = parseInt(s) || 0
+    parsed.minutes = parseInt(m) || 0
+    parsed.hours = parseInt(h) || 0
+  }
+
+  let result = parsed.seconds
+  result += 60 * 60 * parsed.hours
+  result += 60 * parsed.minutes
+
+  return result * 1000 + parsed.ms
 }
 
 /**
