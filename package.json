@@ -1,0 +1,26 @@
+{
+  "name": "npt-timecode",
+  "version": "0.0.0",
+  "description": "A module for working with Normal Play Time (NPT) time codes.",
+  "main": "index.js",
+  "scripts": {
+    "test": "nyc tape test.js"
+  },
+  "keywords": [
+    "normal",
+    "play",
+    "time",
+    "npt",
+    "timecode",
+    "code"
+  ],
+  "author": "Joseph Werle <joseph.werle@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "nyc": "^15.1.0",
+    "tape": "^5.1.1"
+  },
+  "dependencies": {
+    "normalplaytime": "^1.0.6"
+  }
+}
