@@ -19,5 +19,14 @@
   "devDependencies": {
     "nyc": "^15.1.0",
     "tape": "^5.1.1"
-  }
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/little-core-labs/npt-timecode.git"
+  },
+  "bugs": {
+    "url": "https://github.com/little-core-labs/npt-timecode/issues"
+  },
+  "homepage": "https://github.com/little-core-labs/npt-timecode#readme"
 }
