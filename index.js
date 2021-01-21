@@ -506,7 +506,17 @@ function getComputedSeconds(opts) {
   return total
 }
 
+/**
+ * Parse a NPT time string into milliseconds. This function does not parse
+ * range values.
+ * @param {String} string
+ * @return {?Number}
+ */
 function parse(string) {
+  if (!string) {
+    return null
+  }
+
   string = string.trim()
 
   const parsed = { hours: 0, minutes: 0, seconds: 0, ms: 0 }
@@ -555,6 +565,7 @@ function parse(string) {
 module.exports = {
   getComputedTime,
   getComputedSeconds,
+  parse,
   Range,
   Time,
   Timecode

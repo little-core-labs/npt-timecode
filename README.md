@@ -61,7 +61,7 @@ Set the start and optional stop time values for this range.
 timecode.set(30, 60) // 00:00:30-00:01:00
 ```
 
-#### `timecode.reset()
+#### `timecode.reset()`
 
 Reset the timecode state.
 
@@ -165,6 +165,11 @@ time.toString('H') // total hours, not padded
 time.toString('M') // total minutes, not padded
 time.toString('S') // total seconds, not padded
 ```
+
+### `ms = parse(string)`
+
+Parse a NPT time string into milliseconds. This function does not parse
+range values.
 
 ## License
 
