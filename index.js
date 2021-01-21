@@ -22,7 +22,9 @@ const cache = new Map()
  * @example
  * const time = Time.from(305.5) // 5 minutes, 5 seconds, and half a second
  * // or
- * const time = Time.from('05:5.5')
+ * const time = Time.from('5:5.5')
+ * // or
+ * const time = Time.from('00:05:5.5')
  * // or
  * const time = Time.from({ minutes: 5, seconds: 5.5 })
  */
