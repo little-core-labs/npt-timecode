@@ -1,6 +1,6 @@
 {
   "name": "npt-timecode",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A module for working with Normal Play Time (NPT) time codes.",
   "main": "index.js",
   "scripts": {
