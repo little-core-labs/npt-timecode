@@ -5,7 +5,7 @@ npt-timecode
 
 ## Status
 
-![](https://github.com/little-core-labs/npt-timecode/workflows/tests/badge.svg)
+![](https://github.com/little-core-labs/npt-timecode/workflows/Tests/badge.svg)
 
 ## Installation
 
